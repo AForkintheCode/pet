@@ -39,11 +39,18 @@ fetch('https://api.petfinder.com/v2/oauth2/token', {
         let pictureEl = $(`#pic-${i}`)
         function replacePicture(data){
             if (data.animals[i].photos.length === 0 ){
-                pictureEl.attr('src', "./assets/imgs/placeholderimg.jpg")
+                if (pet === 'dog'){
+                pictureEl.attr('src', "./assets/imgs/dog.jpg")
+                }
+                else if (pet === 'cat'){
+                pictureEl.attr('src', "./assets/imgs/cat.jpeg")    
+                }
+                else{
+                pictureEl.attr('src', "./assets/imgs/pet.jpg")   
+                }
             }
             else if (data.animals[i].photos[0].full) {
-                pictureEl.attr('src', data.animals[i].photos[0].full);
-                console.log(data.animals[i].photos[0].full)
+                pictureEl.attr('src', data.animals[i].photos[0].full);                
             }  
             }; 
         replacePicture(data);  
@@ -51,7 +58,7 @@ fetch('https://api.petfinder.com/v2/oauth2/token', {
         document.getElementById(`breed-${i}`).innerHTML = breed;
         document.getElementById(`age-${i}`).innerHTML = age;
         document.getElementById(`gender-${i}`).innerHTML = gender;
-        localStorage.setItem('pet',JSON.stringify())
+        localStorage.setItem( name, JSON.stringify(data.animals[i]))        
         }
        
     
@@ -59,5 +66,15 @@ fetch('https://api.petfinder.com/v2/oauth2/token', {
 })
 
 
+$('.pet').on("click", function (e) {
+    e.preventDefault();
+    let adoptee = ($(this).find('pet-name'));        
+    let aS = JSON.stringify(adoptee.context.innerText);
+    const petArray = aS.split('\\n');
+    let aN = petArray[0].replace('"','')
+    console.log(aN)
+    localStorage.setItem( 'furball', aN)
+    window.location.replace("profile.html");
+})
 
 

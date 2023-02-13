@@ -8,13 +8,16 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" />   
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"/> 
-    <link rel="stylesheet" href="./assets/css/style-e.css"/>
+    <link rel="stylesheet" href="./assets/css/style.css"/>
+    <link rel="stylesheet" href="./assets/css/profile.css"/>
 </head>
 
 <body>
 <!---------------------------- Main Navigation Bar ---------------------------->
     <header class="main-header">
-        <img class="logo" src="images/paw-print.png" alt="home">
+        <a href="./index.html">
+        <img id="paw" class="logo" src="./assets/imgs/paw.jpg" alt="home">
+        </a>
         <nav>        
             <ul class="tabs is-right">
                 <li><a href="dog.html" class="hover-underline-animation">Dog care</a></li>
@@ -26,8 +29,13 @@
     </header>
 
 <!---------------------------- Main Profile Picture Section ---------------------------->
-<div class="container is-fluid is-full">  
-    <div id="profileContainer" class="content is-large has-text-centered">
+<div id = "main" class="container is-fluid is-full"> 
+    <div class="columns">
+        <div class="column has-text-centered"></div>
+      </div>
+    <div class = "columns">
+    <div class = "column is-one-quarter"></div> 
+    <div id="profileContainer" class="column is-half has-text-centered">
                 <h2 id="petname" class="petname pt-4 mt-4 mb-4">Pet Name Here</h2>
                 <div class="profilePIC">
                     <img id="petPics" class="imgCSS" src= "./assets/imgs/placeholderimg.jpg" />
@@ -47,6 +55,8 @@
                     <li id="color"> Color</li>
                     <li id="location"> Location</li>
             </div>
+    </div>
+    <div class = "column is-one-quarter"></div> 
     </div>
 </div>
 
@@ -96,7 +106,7 @@
 
     
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="./assets/js/eugeneScript.js"></script> 
+<script src="./assets/js/profile.js"></script> 
 </body>
 </html>
 

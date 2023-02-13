@@ -9,41 +9,41 @@ var type;
 
 
 // PetFinder Api
-var ID = 'ZIryHn5E8xyhG6vho1rYGCV4W2tB55s4FihvxbhGmXGvSDer4N'
-var secret = 'ZEKvuaftgTQ2Niug84aBdxp97YzvpjaUnmOAXTm0'
-var token;
+// var ID = 'ZIryHn5E8xyhG6vho1rYGCV4W2tB55s4FihvxbhGmXGvSDer4N'
+// var secret = 'ZEKvuaftgTQ2Niug84aBdxp97YzvpjaUnmOAXTm0'
+// var token;
 
 
-function choosePet() {
-  fetch('https://api.petfinder.com/v2/oauth2/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: `grant_type=client_credentials&client_id=${ID}&client_secret=${secret}`
-  }).then((response) => {
-    return response.json()
-  }).then((response) => {
-    console.log(response)
-    token = response.access_token
-    //change query parameters here
-    fetch(`https://api.petfinder.com/v2/animals?`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then((response) => {
-      return response.json()
-    }).then((response) => {
-      console.log(response.animals);
-      console.log(response.animals[0].name);      
+// function choosePet() {
+//   fetch('https://api.petfinder.com/v2/oauth2/token', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/x-www-form-urlencoded'
+//     },
+//     body: `grant_type=client_credentials&client_id=${ID}&client_secret=${secret}`
+//   }).then((response) => {
+//     return response.json()
+//   }).then((response) => {
+//     console.log(response)
+//     token = response.access_token
+//     //change query parameters here
+//     fetch(`https://api.petfinder.com/v2/animals?`, {
+//       method: 'GET',
+//       headers: {
+//         'Authorization': `Bearer ${token}`
+//       }
+//     }).then((response) => {
+//       return response.json()
+//     }).then((response) => {
+//       console.log(response.animals);
+//       console.log(response.animals[0].name);      
 
 
-    })
-  })
-}
+//     })
+//   })
+// }
 
-choosePet();
+// choosePet();
 
 // $('#API-call').on("click", function (e) {
 //   console.log('Surprise me!')  
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 //location search
 
 $('#search').on("click", function (e) {
-  let destination = document.getElementById("location").value;
+  let destination = document.getElementById("place").value;
   if (destination === null){
     alert("Please enter a city.")
     return false;
@@ -144,10 +144,13 @@ $('#search').on("click", function (e) {
   localStorage.clear('preference')
   localStorage.setItem('preference', animal)
   document.getElementById("type").value = animal
-  scooby();
+  scooby();  
+  let map = {"location": destination, "distance": range}
+  localStorage.setItem('places', JSON.stringify(map))
+  initMap();
   document.getElementById("boop-bg").style.display = 'none'
   document.getElementById("loading-bg").style.display = 'block'
-  fillProgress();
+  // fillProgress();
   }
   
 
@@ -158,7 +161,7 @@ $('#search').on("click", function (e) {
 
 //scooby snack
 function scooby() {
-  let $items = $('#type, #location, #distance')
+  let $items = $('#type, #place, #distance')
   var obj = {}
   $items.each(function () {
     obj[this.id] = $(this).val()
@@ -176,7 +179,7 @@ function fillProgress() {
 
       $('#waitroom').val(num);
       if ($('#waitroom').val() == 100) {       
-        window.location.replace("pet.html");
+        window.location.replace("browse.html");
       }
     }, 250 * index);
 
@@ -184,8 +187,13 @@ function fillProgress() {
 
 }
 
+
+
 function initMap(){
 console.log('Google Places API loaded.')
+let google = localStorage.getItem('places')
+console.log(google)
+
 }
 
 

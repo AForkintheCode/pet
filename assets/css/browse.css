@@ -66,3 +66,7 @@ h2{
     border-radius: 5px;
     margin: 5px;
 }
+
+.space{
+  visibility: hidden;
+}
