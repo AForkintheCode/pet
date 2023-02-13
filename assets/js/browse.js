@@ -5,6 +5,12 @@ let miles = data.distance;
 let place = data.location;
 let pet = data.type;
 
+let a = localStorage.getItem('loc')
+let b =JSON.parse(a)
+let latitude = b.lat;
+let longitude = b.long;
+
+
 var ID = 'ZIryHn5E8xyhG6vho1rYGCV4W2tB55s4FihvxbhGmXGvSDer4N'
 var secret = 'ZEKvuaftgTQ2Niug84aBdxp97YzvpjaUnmOAXTm0'
 var token;
@@ -21,7 +27,7 @@ fetch('https://api.petfinder.com/v2/oauth2/token', {
     console.log(response)
     token = response.access_token    
     //change query parameters here
-    fetch(`https://api.petfinder.com/v2/animals?type=${pet}`, {
+    fetch(`https://api.petfinder.com/v2/animals?type=${pet}&location=${latitude},${longitude}&distance${miles}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`

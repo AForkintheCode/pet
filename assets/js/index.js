@@ -7,53 +7,6 @@ document.getElementById("loading-bg").style.display = 'none'
 var animal;
 var type;
 
-
-// PetFinder Api
-// var ID = 'ZIryHn5E8xyhG6vho1rYGCV4W2tB55s4FihvxbhGmXGvSDer4N'
-// var secret = 'ZEKvuaftgTQ2Niug84aBdxp97YzvpjaUnmOAXTm0'
-// var token;
-
-
-// function choosePet() {
-//   fetch('https://api.petfinder.com/v2/oauth2/token', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded'
-//     },
-//     body: `grant_type=client_credentials&client_id=${ID}&client_secret=${secret}`
-//   }).then((response) => {
-//     return response.json()
-//   }).then((response) => {
-//     console.log(response)
-//     token = response.access_token
-//     //change query parameters here
-//     fetch(`https://api.petfinder.com/v2/animals?`, {
-//       method: 'GET',
-//       headers: {
-//         'Authorization': `Bearer ${token}`
-//       }
-//     }).then((response) => {
-//       return response.json()
-//     }).then((response) => {
-//       console.log(response.animals);
-//       console.log(response.animals[0].name);      
-
-
-//     })
-//   })
-// }
-
-// choosePet();
-
-// $('#API-call').on("click", function (e) {
-//   console.log('Surprise me!')  
-//   choosePet();
-
-// });
-
-
-
-
 // Choosing a cat
 $('#catbutton').on("click", function (e) {
   document.getElementById("location").style.display = 'block';
@@ -150,7 +103,7 @@ $('#search').on("click", function (e) {
   initMap();
   document.getElementById("boop-bg").style.display = 'none'
   document.getElementById("loading-bg").style.display = 'block'
-  // fillProgress();
+  fillProgress();
   }
   
 
@@ -188,13 +141,81 @@ function fillProgress() {
 }
 
 
-
+let data = ''; 
 function initMap(){
 console.log('Google Places API loaded.')
-let google = localStorage.getItem('places')
-console.log(google)
+let google = JSON.parse(localStorage.getItem('places'))
+let place = google.location
+key = 'AIzaSyCTQVOisLUpvEpoW30CiZlKlPdNMUiX8J4'
 
+fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=${key}`,{
+    method: 'GET',
+}).then((response) => {
+  return response.json()
+}).then((response) => {
+  console.log(response)
+  let latitude = response.results[0].geometry.location.lat;
+  let longitude = response.results[0].geometry.location.lng;
+  console.log(latitude)
+  console.log(longitude)
+  let lc = {"lat": latitude, "long": longitude}
+  console.log(lc)
+  coordinates = localStorage.setItem('loc', JSON.stringify(lc))
+})
 }
+
+
+
+var ID = 'ZIryHn5E8xyhG6vho1rYGCV4W2tB55s4FihvxbhGmXGvSDer4N'
+var secret = 'ZEKvuaftgTQ2Niug84aBdxp97YzvpjaUnmOAXTm0'
+var token;
+
+var pet0 = $('#pic-1')
+var pet1 = $('#pic-2')
+var pet2 = $('#pic-3')
+
+fetch('https://api.petfinder.com/v2/oauth2/token', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: `grant_type=client_credentials&client_id=${ID}&client_secret=${secret}`
+}).then((response) => {
+    return response.json()
+}).then((response) => {
+    console.log(response)
+    token = response.access_token    
+    //change query parameters here
+    fetch(`https://api.petfinder.com/v2/animals?type=`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }).then((response) => {        
+        return response.json()
+    }).then((data) => {
+        console.log(data.animals)  
+        function replacePlaceholder() {
+          for (let i=0; i<3, i++;){
+          if (data.animals[i].photos.length === 0 ){
+              `pet${i}.attr('src', "./assets/imgs/placeholder.jpg")`
+          }
+          else if (data.animals[i].photos[0].full) {
+              `pet${i}.attr('src', data.animals[i].photos[0].full)`              
+          }
+          }
+        document.getElementById('desc-1').innerHTML = data.animals[0].description;      
+        document.getElementById('desc-2').innerHTML = data.animals[1].description;      
+        document.getElementById('desc-3').innerHTML = data.animals[2].description;
+        }     
+    })
+  })
+
+//pictures
+
+
+
+
 
 
 
@@ -224,102 +245,5 @@ function currentSlide(n) {
   showSlides(slideIndex = n);
 }
 
-// start code for button
-
-// const cards = document.querySelectorAll(".card");
-// let currentIndex = 0;
-
-// function showSlide(n) {
-//   cards[currentIndex].classList.remove("active");
-//   currentIndex = (n + cards.length) % cards.length;
-//   cards[currentIndex].classList.add("active");
-// }
-
-// let progressSlideEl = document.querySelector(".slider-navigation-next");
-// progressSlideEl.addEventListener("click", function () {
-//   showSlide(currentIndex + 1);
-// });
-// // end code for button
-
-// var ID = 'EmpbeFp7f6MKXl7XkxoSG64fRk4kLmwsy3mkt1KGUpsZunCWBp'
-// var secret = 'fb4tKOw40Veks4aKEFdaZ5yQPl5SgwfxzsFDemc2'
-// var token;
-
-// var fetchData = () => {
-//   fetch('https://api.petfinder.com/v2/oauth2/token', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded'
-//     },
-//     body: `grant_type=client_credentials&client_id=${ID}&client_secret=${secret}`
-//   })
-//     .then((response) => {
-//       return response.json()
-//     })
-//     .then((response) => {
-//       // console.log(response)
-//       token = response.access_token
-//       // console.log(token)
-//       //change query parameters here
-//       fetch('https://api.petfinder.com/v2/animals?type=', {
-//         method: 'GET',
-//         headers: {
-//           'Authorization': `Bearer ${token}`
-//         }
-//       })
-//         .then((response) => {
-//           return response.json()
-//         })
-//         .then((data) => {
-
-//           console.log(data.animals)
-//           for (var i = 0; i < data.animals.length; i++) {
-//             var cardTemplate = `
-//           <div class="card">
-//           <div class="card-image">
-//               <figure class="image is-16by9 is-covered">
-//               <img src="${data.animals[i].photos[0].medium}" alt="Animal Image">
-              
-//               </figure>
-//           </div>
-         
-//           <div class="card-content slider-text ">
-//               <div class="is-size-5 box">
-//               name: ${data.animals[i].name}
-//              description: ${data.animals[i].description}
-
-//                   <div class="slider-buttons">
-//                     <button class="button is-primary" id="next">Next</button>
-//                     </div>
-
-//               </div>
-//           </div>      
-//           `
-//             document.querySelector("#slider").innerHTML = $('cardTemplate')
-//             console.log(cardTemplate)
-//           }
-
-//         });
-//       fetch('https://api.petfinder.com/v2/organizations', {
-//         method: 'GET',
-//         headers: {
-//           'Authorization': `Bearer ${token}`
-//         }
-//       })
-//         .then((response) => {
-//           return response.json()
-//         })
-//         .then((data) => {
-//           console.log(data.organizations)
-//         });
-//     });
-// };
-// fetchData();
-
-//carousel
-
-
-
 
 //end 
-
