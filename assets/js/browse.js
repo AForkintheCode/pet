@@ -80,7 +80,7 @@ $('.pet').on("click", function (e) {
     let aN = petArray[0].replace('"','')
     console.log(aN)
     localStorage.setItem( 'furball', aN)
-    window.location.replace("profile.html");
+    window.location.href="profile.html";
 })
 
 

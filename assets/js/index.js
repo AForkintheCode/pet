@@ -131,8 +131,8 @@ function fillProgress() {
     setTimeout(function () {
 
       $('#waitroom').val(num);
-      if ($('#waitroom').val() == 100) {       
-        window.location.replace("browse.html");
+      if ($('#waitroom').val() == 100) {     
+        window.location.href="browse.html";
       }
     }, 250 * index);
 
