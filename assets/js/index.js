@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 $('#search').on("click", function (e) {
   let destination = document.getElementById("place").value;
-  if (destination === null){
+  if (destination === null || destination === ''){
     alert("Please enter a city.")
     return false;
   }else{

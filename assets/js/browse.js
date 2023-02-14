@@ -10,7 +10,10 @@ let b =JSON.parse(a)
 let latitude = b.lat;
 let longitude = b.long;
 
+launch();
 
+
+function launch(){
 var ID = 'ZIryHn5E8xyhG6vho1rYGCV4W2tB55s4FihvxbhGmXGvSDer4N'
 var secret = 'ZEKvuaftgTQ2Niug84aBdxp97YzvpjaUnmOAXTm0'
 var token;
@@ -69,6 +72,32 @@ fetch('https://api.petfinder.com/v2/oauth2/token', {
        
     
     })
+})
+}
+
+
+$('#search').on("click", function (e) {
+    
+
+    let place = document.getElementById('location').value
+    if (place === null || place === ''){
+        alert("Please enter a city.")
+        return false;
+    }else{
+    key = 'AIzaSyCTQVOisLUpvEpoW30CiZlKlPdNMUiX8J4'
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=${key}`,{
+        method: 'GET',
+    }).then((response) => {
+      return response.json()
+    }).then((response) => {
+      console.log(response)
+      latitude = response.results[0].geometry.location.lat;
+      longitude = response.results[0].geometry.location.lng;
+    })
+}
+
+    launch();
+
 })
 
 
