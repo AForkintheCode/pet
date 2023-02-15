@@ -170,10 +170,6 @@ var ID = 'ZIryHn5E8xyhG6vho1rYGCV4W2tB55s4FihvxbhGmXGvSDer4N'
 var secret = 'ZEKvuaftgTQ2Niug84aBdxp97YzvpjaUnmOAXTm0'
 var token;
 
-var pet0 = $('#pic-1')
-var pet1 = $('#pic-2')
-var pet2 = $('#pic-3')
-
 fetch('https://api.petfinder.com/v2/oauth2/token', {
     method: 'POST',
     headers: {
@@ -194,25 +190,14 @@ fetch('https://api.petfinder.com/v2/oauth2/token', {
     }).then((response) => {        
         return response.json()
     }).then((data) => {
-        console.log(data.animals)  
-        function replacePlaceholder() {
-          for (let i=0; i<3, i++;){
-          if (data.animals[i].photos.length === 0 ){
-              `pet${i}.attr('src', "./assets/imgs/placeholder.jpg")`
-          }
-          else if (data.animals[i].photos[0].full) {
-              `pet${i}.attr('src', data.animals[i].photos[0].full)`              
-          }
-          }
-        document.getElementById('desc-1').innerHTML = data.animals[0].description;      
-        document.getElementById('desc-2').innerHTML = data.animals[1].description;      
-        document.getElementById('desc-3').innerHTML = data.animals[2].description;
-        }     
+      // animalsArray = data.animals[0].photos
+      console.log(data.animals)
+      // profileSliders(data)        
+        })
     })
-  })
+  
 
 //pictures
-
 
 
 
@@ -245,5 +230,3 @@ function currentSlide(n) {
   showSlides(slideIndex = n);
 }
 
-
-//end 

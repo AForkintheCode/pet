@@ -80,6 +80,8 @@ $('#search').on("click", function (e) {
     
 
     let place = document.getElementById('location').value
+    miles = document.getElementById('distance').value
+    console.log(miles)
     if (place === null || place === ''){
         alert("Please enter a city.")
         return false;
@@ -105,6 +107,7 @@ $('.pet').on("click", function (e) {
     e.preventDefault();
     let adoptee = ($(this).find('pet-name'));        
     let aS = JSON.stringify(adoptee.context.innerText);
+    console.log(aS)
     const petArray = aS.split('\\n');
     let aN = petArray[0].replace('"','')
     console.log(aN)
