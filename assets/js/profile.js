@@ -5,7 +5,6 @@ console.log(obj2);
 var petPics = $('#petPics');
 let animalPhotosArray = obj2.photos;
 
-
 document.getElementById('petname').innerHTML = obj2.name;
 document.getElementById('type').innerHTML = obj2.type;
 document.getElementById('breed').innerHTML = obj2.breeds.primary;
@@ -80,6 +79,30 @@ var secret = 'fb4tKOw40Veks4aKEFdaZ5yQPl5SgwfxzsFDemc2'
 var token;
 let id = obj2.organization_id;
 
+//googlemaps API variables
+var googlemapsAPI = "AIzaSyCTQVOisLUpvEpoW30CiZlKlPdNMUiX8J4";
+var googlemapsAddress;
+var googlemapsURL = "https://www.google.com/maps/embed/v1/place?key=" + googlemapsAPI + "&q=" + googlemapsAddress;
+
+// //petfinder API variables
+// var animalAPI = "https://api.petfinder.com/v2/animals?type=";
+// var organizationAPI = "https://api.petfinder.com/v2/organizations?name=";
+// var petIDAPI = "https://api.petfinder.com/v2/animals/{id}";
+
+
+
+// // variables to DOM maniplate and add pet details to HTML
+// var story = $('#story');
+// var petPics = $('#petPics');
+// var petNameEl = $('#petname');
+// var typeEl = $('#type');
+// var breedEl = $('#breed');
+// var ageEl = $('#age');
+// var genderEl = $('#gender');
+// var colorEl = $('#color');
+// var locationEl = $('#location');
+// var animalPhotosArray;
+
 //organization's contact information variables
 var orgnameEl = $('#orgName');
 var orgphoneNumberEl = $('#phoneNumber');
@@ -129,96 +152,56 @@ fetchData = () => {
 // end of fetch function
 fetchData(); 
 
-mapping();
-
-function mapping(){
-let addy = obj2.contact.address;
-let mailbox;
-if (addy.address1.length == 0 || addy.address1.length == null){
-    mailbox = ''
-}
-else if (addy.address1.length < 0){
-    mailbox = addy.address1;
-}
-
-
-let city = addy.city;
-let country = addy.country;
-let zip = addy.postcode;
-let state = addy.state;
-let address = mailbox + city + state + zip;
-console.log(address)
-
-key = 'AIzaSyCTQVOisLUpvEpoW30CiZlKlPdNMUiX8J4'
-fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${key}`,{
-    method: 'GET',
-}).then((response) => {
-  return response.json()
-}).then((response) => {
-  console.log(response)
-  latitude = response.results[0].geometry.location.lat;
-  longitude = response.results[0].geometry.location.lng;
-  initMap()
-
-  // Note: This example requires that you consent to location sharing when
-// prompted by your browser. If you see the error "The Geolocation service
-// failed.", it means you probably did not give permission for the browser to
-// locate you.
+//code to show current location https://developers.google.com/maps/documentation/javascript/geolocation#maps_map_geolocation-javascript
 let map, infoWindow;
-
 function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: latitude, lng: longitude },
-    zoom: 12,
-  });
-  infoWindow = new google.maps.InfoWindow();
+    map = new google.maps.Map(document.getElementById("googleMaps"), {
+        center: { lat: -34.397, lng: 150.644 },
+        zoom: 6,
+    });
+    infoWindow = new google.maps.InfoWindow();
 
-  const locationButton = document.createElement("button");
+    const locationButton = document.createElement("button");
 
-  locationButton.textContent = "Pan to Current Location";
-  locationButton.classList.add("custom-map-control-button");
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-  locationButton.addEventListener("click", () => {
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
+    locationButton.textContent = "Pan to Current Location";
+    locationButton.classList.add("custom-map-control-button");
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+    locationButton.addEventListener("click", () => {
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
 
-          infoWindow.setPosition(pos);
-          infoWindow.setContent("Location found.");
-          infoWindow.open(map);
-          map.setCenter(pos);
-        },
-        () => {
-          handleLocationError(true, infoWindow, map.getCenter());
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent("Location found.");
+                    infoWindow.open(map);
+                    map.setCenter(pos);
+                },
+                () => {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                }
+            );
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
         }
-      );
-    } else {
-      // Browser doesn't support Geolocation
-      handleLocationError(false, infoWindow, map.getCenter());
-    }
-  });
+    });
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(
-    browserHasGeolocation
-      ? "Error: The Geolocation service failed."
-      : "Error: Your browser doesn't support geolocation."
-  );
-  infoWindow.open(map);
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(
+        browserHasGeolocation
+            ? "Error: The Geolocation service failed."
+            : "Error: Your browser doesn't support geolocation."
+    );
+    infoWindow.open(map);
 }
 
 window.initMap = initMap;
 
-})
-
-
-}
-
-
+// // end of current location code
