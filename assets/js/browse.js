@@ -80,6 +80,7 @@ $('#search').on("click", function (e) {
     
 
     let place = document.getElementById('location').value
+    let range = document.getElementById("distance").value
     if (place === null || place === ''){
         alert("Please enter a city.")
         return false;
