@@ -4,6 +4,7 @@ let obj2 = JSON.parse(localStorage.getItem(obj1))
 console.log(obj2);
 var petPics = $('#petPics');
 let animalPhotosArray = obj2.photos;
+// let location = obj2.;
 
 document.getElementById('petname').innerHTML = obj2.name;
 document.getElementById('type').innerHTML = obj2.type;
@@ -12,7 +13,7 @@ document.getElementById('age').innerHTML = obj2.age;
 document.getElementById('gender').innerHTML = obj2.gender;
 document.getElementById('color').innerHTML = obj2.colors.primary;
 document.getElementById('story').innerHTML = obj2.description;
-// document.getElementById('location').innerHTML = obj2.name;
+
 
 replacePlaceholder(obj2) //function to replace image place holder to pet's profile image
 colorGender(obj2) //function to add color to profile based on pet's gender
@@ -84,25 +85,6 @@ var googlemapsAPI = "AIzaSyCTQVOisLUpvEpoW30CiZlKlPdNMUiX8J4";
 var googlemapsAddress;
 var googlemapsURL = "https://www.google.com/maps/embed/v1/place?key=" + googlemapsAPI + "&q=" + googlemapsAddress;
 
-// //petfinder API variables
-// var animalAPI = "https://api.petfinder.com/v2/animals?type=";
-// var organizationAPI = "https://api.petfinder.com/v2/organizations?name=";
-// var petIDAPI = "https://api.petfinder.com/v2/animals/{id}";
-
-
-
-// // variables to DOM maniplate and add pet details to HTML
-// var story = $('#story');
-// var petPics = $('#petPics');
-// var petNameEl = $('#petname');
-// var typeEl = $('#type');
-// var breedEl = $('#breed');
-// var ageEl = $('#age');
-// var genderEl = $('#gender');
-// var colorEl = $('#color');
-// var locationEl = $('#location');
-// var animalPhotosArray;
-
 //organization's contact information variables
 var orgnameEl = $('#orgName');
 var orgphoneNumberEl = $('#phoneNumber');
@@ -151,57 +133,54 @@ fetchData = () => {
 };
 // end of fetch function
 fetchData(); 
+map();
 
-//code to show current location https://developers.google.com/maps/documentation/javascript/geolocation#maps_map_geolocation-javascript
-let map, infoWindow;
-function initMap() {
-    map = new google.maps.Map(document.getElementById("googleMaps"), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 6,
+function map(){
+let addy;
+if (obj2.contact.address.address1 === null || obj2.contact.address.address1 == 0 ){
+    addy = '';
+}
+else if (obj2.contact.address.address1.length>0){
+ addy = obj2.contact.address.address1;
+}
+let city = obj2.contact.address.city
+let state = obj2.contact.address.state
+let zip = obj2.contact.address.postcode
+
+let place = addy + city + state + zip
+console.log(place)
+
+key = 'AIzaSyCTQVOisLUpvEpoW30CiZlKlPdNMUiX8J4'
+
+fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${place}&key=${key}`,{
+    method: 'GET',
+}).then((response) => {
+  return response.json()
+}).then((response) => {
+  console.log(response)
+  let latitude = response.results[0].geometry.location.lat;
+  let longitude = response.results[0].geometry.location.lng;
+    initMap();
+
+  function initMap() {
+    
+    const location = { lat: latitude, lng: longitude };
+    
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 12,
+      center: location,
     });
-    infoWindow = new google.maps.InfoWindow();
-
-    const locationButton = document.createElement("button");
-
-    locationButton.textContent = "Pan to Current Location";
-    locationButton.classList.add("custom-map-control-button");
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-    locationButton.addEventListener("click", () => {
-        // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    };
-
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent("Location found.");
-                    infoWindow.open(map);
-                    map.setCenter(pos);
-                },
-                () => {
-                    handleLocationError(true, infoWindow, map.getCenter());
-                }
-            );
-        } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, infoWindow, map.getCenter());
-        }
+    // The marker, positioned at Uluru
+    const marker = new google.maps.Marker({
+      position: location,
+      map: map,
     });
+  }
+  
+  window.initMap = initMap;
+  
+
+
+  })  
 }
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(
-        browserHasGeolocation
-            ? "Error: The Geolocation service failed."
-            : "Error: Your browser doesn't support geolocation."
-    );
-    infoWindow.open(map);
-}
-
-window.initMap = initMap;
-
-// // end of current location code
